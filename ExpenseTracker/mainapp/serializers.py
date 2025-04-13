@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import User, EmailOTP
 
-
 class UserRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     otp = serializers.CharField(write_only=True)
@@ -10,6 +9,11 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         model = User
         fields = ['name', 'email', 'username', 'number', 'password', 'password2', 'otp']
         extra_kwargs = {'password': {'write_only': True}}
+
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError("This email is already registered. Please log in or use another.")
+        return value
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -28,7 +32,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-
 class UserUpdateSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
 
@@ -40,6 +43,7 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError("Passwords do not match")
         return attrs
+
 
 class EmailOTPSerializer(serializers.ModelSerializer):
     class Meta:

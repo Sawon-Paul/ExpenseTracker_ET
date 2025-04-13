@@ -16,11 +16,11 @@ from django.contrib.auth.decorators import login_required
 
 # Render registration form
 def register_page(request):
-    return render(request, 'register.html')
+    return render(request, 'REGISTER/register.html')
 
 # Render login form
 def login_page(request):
-    return render(request, 'login.html')
+    return render(request, 'LOGIN/login.html')
 
 # Render update profile form
 def update_profile_page(request):
@@ -32,7 +32,7 @@ def delete_account_page(request):
 
 @login_required
 def dashboard_page(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'DASHBOARD/dashboard.html')
 
 
 class SendOTP(APIView):
@@ -61,9 +61,6 @@ class SendOTP(APIView):
 
 
 class RegisterView(APIView):
-    def get(self, request):
-        return render(request, 'register.html')
-
     def post(self, request):
         email = request.data.get('email')
         otp_input = request.data.get('otp')
@@ -71,22 +68,17 @@ class RegisterView(APIView):
         try:
             otp_record = EmailOTP.objects.get(email=email)
         except EmailOTP.DoesNotExist:
-            return Response({'error': 'OTP not requested'}, status=400)
+            return render(request, 'register.html', {'errors': {'otp': 'OTP not requested'}})
 
         if otp_record.otp != otp_input:
-            return Response({'error': 'Invalid OTP'}, status=400)
+            return render(request, 'register.html', {'errors': {'otp': 'Invalid OTP'}})
 
-        # Serialize the registration data and check if passwords match
         serializer = UserRegisterSerializer(data=request.data)
+        print(serializer)
         if serializer.is_valid():
-            # Save the new user data to the database
             serializer.save()
             otp_record.delete()
-
-            # Redirect to login page after successful registration
-            return HttpResponseRedirect('/login/')  # Redirect to login page URL directly
-
-        # If there are validation errors, stay on the registration page
+            return redirect('/login/') 
         return render(request, 'register.html', {'errors': serializer.errors})
 
 
@@ -102,9 +94,8 @@ class LoginView(APIView):
         print("User authenticated:", user)
         if user is not None:
             login(request, user)
-
             return redirect('/dashboard/')
-        return render(request, 'login.html', {'errors': {'login': 'Invalid credentials'}})
+        return render(request, "login.html", {"error": "Invalid email or password."})
 
     
     

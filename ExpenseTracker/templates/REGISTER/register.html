@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/REGISTER/Register.css' %}">
+</head>
+<body>
+
+<div class="container">
+    <h2>Create an Account</h2>
+
+    <div class="form-container">
+        <form method="post" action="/register-api/">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" name="name" id="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" id="username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="number">Phone Number</label>
+                <input type="text" name="number" id="number" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                <input type="password" name="password2" id="password2" required>
+            </div>
+
+            <div class="form-group">
+                <label for="otp">OTP</label>
+                <input type="text" name="otp" id="otp" required>
+            </div>
+
+            <!-- Send OTP button first -->
+            <button type="button" class="otp-btn" id="send-otp-btn">Send OTP</button>
+            
+            <!-- Then the Register button -->
+            <button type="submit" class="submit-btn">Register</button>
+        </form>
+
+        {% if errors %}
+            <div class="error-messages">
+                <ul>
+                    {% for field, error_list in errors.items %}
+                        {% for error in error_list %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    const sendOtpBtn = document.getElementById('send-otp-btn');
+
+    sendOtpBtn.addEventListener('click', function () {
+        const email = document.querySelector('input[name="email"]').value;
+        const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+        if (!email) {
+            alert("Please enter your email first.");
+            return;
+        }
+
+        sendOtpBtn.disabled = true;
+        fetch('/send-otp/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ email: email })
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(data.msg || data.error);
+        })
+        .catch(error => {
+            console.error('Error sending OTP:', error);
+        });
+
+        // Disable the button for 10 seconds
+        setTimeout(() => {
+            sendOtpBtn.disabled = false;
+        }, 10000);
+    });
+</script>
+
+</body>
+</html>
