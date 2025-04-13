@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{% static 'css/Register.css' %}">
+</head>
+<body>
+
+    <div class="container">
+        <h2>Create an Account</h2>
+
+        <div class="form-container">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" name="name" id="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="number">Phone Number</label>
+                    <input type="text" name="number" id="number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" name="password2" id="password2" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="otp">OTP</label>
+                    <input type="text" name="otp" id="otp" required>
+                </div>
+
+                <button type="submit" class="submit-btn">Register</button>
+                <button type="button" class="otp-btn" id="send-otp-btn">Send OTP</button>
+            </form>
+
+            {% if errors %}
+                <div class="error-messages">
+                    <ul>
+                        {% for field, error in errors.items %}
+                            <li>{{ field }}: {{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('send-otp-btn').addEventListener('click', function() {
+            var email = document.querySelector('input[name="email"]').value;
+
+            fetch('/send-otp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || data.error);
+            })
+            .catch(error => {
+                console.error('Error sending OTP:', error);
+            });
+        });
+    </script>
+
+</body>
+</html>

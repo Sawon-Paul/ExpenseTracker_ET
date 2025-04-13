@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delete Account</title>
+    <link rel="stylesheet" href="{% static 'delete_account.css' %}">
+</head>
+<body>
+    <h2>Delete Account</h2>
+    <form id="delete-account-form" method="post">
+        {% csrf_token %}
+        <input type="email" name="email" id="email" placeholder="Email" required><br>
+        <input type="text" name="otp" id="otp" placeholder="Enter OTP" required><br>
+        <button type="submit">Delete Account</button>
+    </form>
+
+    <script>
+        document.getElementById("delete-account-form").addEventListener("submit", function(event){
+            event.preventDefault();
+            // Handle form submission with JavaScript (AJAX)
+        });
+    </script>
+</body>
+</html>
+
+
+
