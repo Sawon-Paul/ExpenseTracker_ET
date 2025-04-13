@@ -14,9 +14,11 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
 
+
+# def home(request):
+#     return redirect('http://localhost:3000/')
+
 # Render registration form
-def home(request):
-    return redirect('http://localhost:3000/')
 def register_page(request):
     return render(request, 'REGISTER/register.html')
 
@@ -33,8 +35,10 @@ def delete_account_page(request):
     return render(request, 'delete_account.html')
 
 @login_required
+# def dashboard_page(request):
+#     return render(request, 'DASHBOARD/dashboard.html')
 def dashboard_page(request):
-    return render(request, 'http://localhost:3000/')
+    return redirect('http://localhost:3000/')
 
 
 class SendOTP(APIView):
