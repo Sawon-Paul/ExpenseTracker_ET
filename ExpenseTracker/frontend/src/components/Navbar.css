@@ -1,0 +1,46 @@
+/* Navbar Styles */
+.navbar {
+  background-color: #003366;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  height: 50px;
+  box-sizing: border-box; /* Ensures padding doesn't affect width calculation */
+}
+
+.navbar .logo {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navbar .buttons {
+  display: flex;
+  justify-content: flex-end;
+  width: auto; /* Avoid forcing width to be too large */
+}
+
+.navbar button {
+  background-color: #ffffff;
+  color: #003366;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 15px; /* Creates space between buttons */
+}
+
+.navbar button:hover {
+  background-color: #f0f0f0;
+}
+
+body {
+  padding-top: 60px;
+}

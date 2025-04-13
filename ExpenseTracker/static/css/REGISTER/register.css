@@ -46,7 +46,6 @@ label {
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="otp"],
 input[type="number"] {
     width: 100%;
     padding: 12px;
@@ -113,4 +112,24 @@ button {
 
 .error-messages li {
     margin-bottom: 6px;
+}
+
+/* Register text below form */
+.register-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 15px;
+    color: #333;
+}
+
+.register-link {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+    color: #0056b3;
 }

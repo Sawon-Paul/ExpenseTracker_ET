@@ -13,7 +13,6 @@
         <h2>Login to Your Account</h2>
 
         <div class="form-container">
-            <!-- Add action="{% url 'login_api' %}" -->
             <form method="post" action="{% url 'login_api' %}">
                 {% csrf_token %}
 
@@ -29,6 +28,12 @@
 
                 <button type="submit" class="submit-btn">Login</button>
             </form>
+
+            <!-- Only "Register here" is clickable -->
+            <p class="register-text">
+                Don’t have an account?
+                <a href="{% url 'register' %}" class="register-link">Register here</a>
+            </p>
 
             {% if error %}
                 <div class="error-messages">
