@@ -37,6 +37,7 @@ def delete_account_page(request):
 @login_required
 # def dashboard_page(request):
 #     return render(request, 'DASHBOARD/dashboard.html')
+@login_required
 def dashboard_page(request):
     return redirect('http://localhost:3000/')
 
