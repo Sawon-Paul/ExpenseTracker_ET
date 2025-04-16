@@ -4,8 +4,6 @@ from .views import register_page, login_page, dashboard_page, logout_view, SendO
 urlpatterns = [
     path('register/', register_page, name='register'),
     path('home/', home,name='home'),
-
-
     path('login/', login_page, name='login'),
     path('dashboard/', dashboard_page, name='dashboard'),
     path('logout/', logout_view, name='logout'),  # Logout path
