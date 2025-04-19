@@ -1,36 +1,36 @@
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f4f6f9;
-  margin: 0;
-  padding: 0;
+  background-color: #f8f9fa;
 }
 
-.contact-section {
-  background-color: #ffffff;
-  padding-top: 50px;
-  padding-bottom: 50px;
-}
-
-h1, h3, h4 {
+h2, h5 {
   font-weight: 600;
 }
 
-.list-group-item {
-  background-color: transparent;
-  border: none;
-  font-size: 1rem;
+ul {
+  padding-left: 1rem;
 }
 
-.form-control, textarea {
-  border-radius: 8px !important;
-  font-size: 1rem;
+ul li {
+  margin-bottom: 0.5rem;
+  font-size: 1.05rem;
 }
 
-.btn-primary {
-  border-radius: 8px;
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+form input, form textarea {
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+form .btn {
   font-weight: 500;
-}
-
-.btn-outline-primary {
-  border-radius: 8px;
+  border-radius: 5px;
 }
