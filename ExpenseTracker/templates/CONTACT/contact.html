@@ -58,6 +58,16 @@
         <!-- Right Form -->
         <div class="col-md-6">
           <h2 class="text-primary mb-3">Contact Us</h2>
+          
+          <!-- Success or Error Message -->
+          {% if messages %}
+            <div class="alert alert-info" role="alert">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+
           <form method="post" class="p-3 border rounded bg-light shadow-sm">
             {% csrf_token %}
             <div class="mb-3">
@@ -66,13 +76,20 @@
             <div class="mb-3">
               <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required></textarea>
             </div>
+            <!-- New checkbox: Are you a user? -->
+            <div class="form-check mb-2">
+              <input class="form-check-input" type="checkbox" name="is_user" id="is_user">
+              <label class="form-check-label" for="is_user">
+                I am a registered user
+              </label>
+            </div>
             <div class="form-check mb-3">
               <input class="form-check-input" type="checkbox" name="consent" required>
               <label class="form-check-label">
                 I agree to the privacy policy.
               </label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Submit</button>
+            <button type="submit" class="btn btn-primary w-100" id="submitBtn" disabled>Submit</button>
           </form>
         </div>
       </div>
@@ -80,5 +97,15 @@
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Enable submit button only if checkbox is checked -->
+  <script>
+    const consentCheckbox = document.querySelector('input[name="consent"]');
+    const submitButton = document.getElementById('submitBtn');
+    
+    consentCheckbox.addEventListener('change', function() {
+      submitButton.disabled = !this.checked;
+    });
+  </script>
 </body>
 </html>

@@ -50,3 +50,15 @@ class EmailOTP(models.Model):
     def generate_otp(self):
         self.otp = str(random.randint(100000, 999999))
         self.save()
+
+
+
+
+class Feedback(models.Model):
+    email = models.EmailField()
+    message = models.TextField()
+    is_user = models.BooleanField(default=False)  # To track if the user is a registered user
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Feedback from {self.email} - {self.created_at}"

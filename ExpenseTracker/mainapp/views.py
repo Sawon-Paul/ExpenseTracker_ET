@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import render, redirect
-from .models import User, EmailOTP
+from .models import User, EmailOTP, Feedback
 from .serializers import UserRegisterSerializer, UserUpdateSerializer, EmailOTPSerializer
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
@@ -12,14 +12,11 @@ from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-
+from django.contrib import messages
 
 
 def home_view(request):
     return render(request, 'Home/home.html')
-
-def contact_view(request):
-    return render(request, 'CONTACT/contact.html')
 
 
 # Render registration form
@@ -41,6 +38,31 @@ def delete_account_page(request):
 @login_required
 def dashboard_page(request):
     return render(request, 'dashboard/dashboard.html')
+
+
+
+def contact_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+        is_user = request.POST.get('is_user') == 'on'  # 'on' means checked
+
+        # Check if the user agreed to the privacy policy
+        consent = request.POST.get('consent') == 'on'
+        if not consent:
+            messages.error(request, "You must agree to the privacy policy before submitting.")
+            return redirect('contact')
+
+        # Save the feedback to the database
+        Feedback.objects.create(email=email, message=message, is_user=is_user)
+
+        # Show a success message
+        messages.success(request, "Your feedback has been submitted successfully!")
+        return redirect('contact')
+
+    return render(request, 'CONTACT/contact.html')
+
+
 
 
 class SendOTP(APIView):
