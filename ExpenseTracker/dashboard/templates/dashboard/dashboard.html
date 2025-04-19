@@ -1,0 +1,85 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{% static 'dashboard/css/dashboard.css' %}">
+    <script src="{% static 'dashboard/js/dashboard.js' %}"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-left">
+                <button class="sidebar-button" id="toggleSidebar">☰</button>
+                <span class="site-title">Expense Tracker</span>
+            </div>
+            <div class="navbar-right">
+                <button class="donate-btn" id = "donateButton">Donate</button>
+                <button class="help-btn" id = "helpButton">Help</button>
+                <button class="logout-btn" id = "logoutButton">Logout</button>
+            </div>
+        </nav>
+
+        <div id="donateFormContainer" class="donate-form hidden">
+            <h2>Donate</h2>
+            <form id="donationForm">
+                <label for="donorName">Name:</label>
+                <input type="text" id="donorName" name="donorName" required>
+        
+                <label for="donationAmount">Amount (৳):</label>
+                <input type="number" id="donationAmount" name="donationAmount" required>
+        
+                <label for="donorEmail">Email (optional):</label>
+                <input type="email" id="donorEmail" name="donorEmail">
+        
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        
+        <!-- Sidebar + Main Content -->
+        <div class="content-area">
+            <aside class="sidebar" id="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#">Transactions</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Settings</a></li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                
+                <div class="transaction-container">
+                    <h2>Transactions</h2>
+                
+                    <div class="filter-buttons">
+                        <button onclick="loadTransactions('all')">All</button>
+                        <button onclick="loadTransactions('cash_in')">Cash In</button>
+                        <button onclick="loadTransactions('cash_out')">Cash Out</button>
+                    </div>
+                
+                    <table id="transactionTable" class="transaction-table">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Subtype</th>
+                                <th>Amount</th>
+                                <th>Description</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Rows inserted by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                
+            </main>
+
+           
+        </div>
+    </div>
+</body>
+</html>
