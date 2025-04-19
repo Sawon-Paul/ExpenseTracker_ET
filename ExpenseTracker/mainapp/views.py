@@ -19,7 +19,7 @@ def home_view(request):
     return render(request, 'Home/home.html')
 
 def contact_view(request):
-    return render(request, 'contact.html')
+    return render(request, 'CONTACT/contact.html')
 
 
 # Render registration form
