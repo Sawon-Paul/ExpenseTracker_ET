@@ -32,9 +32,9 @@ def update_profile_page(request):
 def delete_account_page(request):
     return render(request, 'delete_account.html')
 
-@login_required
+
 def dashboard_page(request):
-    return render(request, 'DASHBOARD/dashboard.html')
+    return render(request, 'dashboard/dashboard.html')
 
 
 class SendOTP(APIView):

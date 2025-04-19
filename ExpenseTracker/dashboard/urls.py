@@ -1,9 +1,7 @@
 # transactions/urls.py
 from django.urls import path
-from .views import AllTransactionsView, CashInTransactionsView, CashOutTransactionsView
+from .views import transaction_list
 
 urlpatterns = [
-    path('all/', AllTransactionsView.as_view(), name='all-transactions'),
-    path('cash-in/', CashInTransactionsView.as_view(), name='cash-in-transactions'),
-    path('cash-out/', CashOutTransactionsView.as_view(), name='cash-out-transactions'),
+    path('transactions/', transaction_list, name='transaction_list'),
 ]
