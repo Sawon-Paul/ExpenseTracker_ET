@@ -1,0 +1,30 @@
+<!-- templates/contact.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - Expense Tracker</title>
+  <link rel="stylesheet" href="{% static 'css/contact.css' %}">
+</head>
+<body>
+  <div class="container">
+    <h1>Contact Us</h1>
+    <p>Thank you for using the Expense Tracker App!</p>
+    <p>If you have any questions or feedback, fill out the form below.</p>
+
+    <form method="post">
+      {% csrf_token %}
+      <input type="email" name="email" placeholder="Your Email" required />
+      <textarea name="message" placeholder="Your Comments" rows="5" required></textarea>
+      <label>
+        <input type="checkbox" name="consent" required />
+        I agree to the privacy policy.
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+
+    <a href="{% url 'home' %}" class="home-link">← Back to Home</a>
+  </div>
+</body>
+</html>

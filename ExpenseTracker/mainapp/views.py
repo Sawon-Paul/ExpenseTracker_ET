@@ -14,9 +14,15 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 
 
+
+def home_view(request):
+    return render(request, 'Home/home.html')
+
+def contact_view(request):
+    return render(request, 'contact.html')
+
+
 # Render registration form
-def home(request):
-    return redirect('')
 def register_page(request):
     return render(request, 'REGISTER/register.html')
 
