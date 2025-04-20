@@ -18,6 +18,11 @@ from django.contrib import messages
 def home_view(request):
     return render(request, 'Home/home.html')
 
+def contactus_page(request):
+    return render(request,'CONTACT/c_us.html')
+
+def setting_page(request):
+    return render(request,'SETTING/setting.html')
 
 # Render registration form
 def register_page(request):
@@ -40,7 +45,7 @@ def dashboard_page(request):
     return render(request, 'dashboard/dashboard.html')
 
 
-
+@login_required
 def contact_view(request):
     if request.method == 'POST':
         email = request.POST.get('email')
@@ -52,15 +57,21 @@ def contact_view(request):
         if not consent:
             messages.error(request, "You must agree to the privacy policy before submitting.")
             return redirect('contact')
+        
+
+        # Check if user is authenticated and email matches
+        if request.user.is_authenticated:
+            if email != request.user.email:
+                messages.error(request, "Email doesn't match your account email.")
+                return redirect('contact')
 
         # Save the feedback to the database
         Feedback.objects.create(email=email, message=message, is_user=is_user)
-
         # Show a success message
         messages.success(request, "Your feedback has been submitted successfully!")
         return redirect('contact')
-
-    return render(request, 'CONTACT/contact.html')
+    initial_email = request.user.email if request.user.is_authenticated else ''
+    return render(request, 'CONTACT/contact.html', {'initial_email': initial_email})
 
 
 
@@ -113,19 +124,15 @@ class RegisterView(APIView):
 
 
 class LoginView(APIView):
-    print("hi")
     def post(self, request):
         email = request.data.get('email')
         password = request.data.get('password')
 
         user = authenticate(request, email=email, password=password)
-        print("Email:", email)
-        print("Password:", password)
-        print("User authenticated:", user)
         if user is not None:
             login(request, user)
             return redirect('/dashboard/')
-        return render(request, "login.html", {"error": "Invalid email or password."})
+        return render(request, "Login/login.html", {"error": "Invalid email or password."})
 
     
     

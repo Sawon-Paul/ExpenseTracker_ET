@@ -5,107 +5,117 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact Us - Expense Tracker</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/CONTACT/contact.css' %}">
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{% static 'css/DASHBOARD/theme.css' %}">
+  <link rel="stylesheet" href="{% static 'css/DASHBOARD/dashboardc.css' %}">
+  <link rel="stylesheet" href="{% static 'css/CONTACT/contactc.css' %}">
+
+  <!-- Scripts -->
+  <script src="{% static 'css/DASHBOARD/js/dashboard.js' %}"></script>
+  <script src="{% static 'css/DASHBOARD/js/theme.js' %}"></script>
+  <script src="{% static 'css/CONTACT/js/contact.js' %}"></script>
 </head>
-<body>
+<body class="contact-page">
+  <div class="container">
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="navbar-left">
+        <button class="sidebar-button" id="toggleSidebar">☰</button>
+        <span class="site-title">Expense Tracker</span>
+      </div>
+      <div class="navbar-right">
+        <span id="themeToggle" onclick="toggleTheme()">🌙</span>
+        <button class="donate-btn" id="donateButton">Donate</button>
+        <button class="help-btn" id="helpButton">Help</button>
+        <button class="logout-btn" id="logoutButton">Logout</button>
+      </div>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid px-4">
-      <a class="navbar-brand" href="{% url 'home' %}">Expense Tracker</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <!-- Donate Form -->
+    <div id="donateFormContainer" class="donate-form hidden">
+      <h2>Donate</h2>
+      <form id="donationForm">
+        <label for="donorName">Name:</label>
+        <input type="text" id="donorName" name="donorName" required>
 
-      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'home' %}">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'contact' %}">Contact Us</a>
-          </li>
+        <label for="donationAmount">Amount (৳):</label>
+        <input type="number" id="donationAmount" name="donationAmount" required>
+
+        <label for="donorEmail">Email (optional):</label>
+        <input type="email" id="donorEmail" name="donorEmail">
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+
+    <!-- Sidebar + Main Content -->
+    <div class="content-area">
+      <aside class="sidebar" id="sidebar">
+        <ul class="sidebar-menu">
+          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+          <li><a href="#">Transactions</a></li>
+          <li><a href="#">Reports</a></li>
+          <li><a href="{% url 'setting' %}">Settings</a></li>
+          <li><a href="{% url 'contact' %}">Contact Us</a></li>
         </ul>
-      </div>
-    </div>
-  </nav>
+      </aside>
 
-  <!-- Contact Section -->
-  <section class="py-5">
-    <div class="container px-3 px-md-4">
-      <div class="row g-5 align-items-center">
-        <!-- Left Info -->
-        <div class="col-md-6">
-          <h2 class="text-primary mb-3">Why Choose Expense Tracker?</h2>
-          <p>Expense Tracker helps you take full control of your finances by:</p>
-          <ul class="list-unstyled">
-            <li>💸 Tracking daily expenses</li>
-            <li>📊 Providing real-time insights</li>
-            <li>📅 Managing your budget efficiently</li>
-            <li>🔐 Ensuring secure, user-friendly experience</li>
-          </ul>
+      <!-- Main Content -->
+      <main class="main-content">
+        <section class="contact-section">
+          <div class="contact-container">
+            <div class="contact-info">
+              <h2>Why Choose Expense Tracker?</h2>
+              <p>Expense Tracker helps you take full control of your finances by:</p>
+              <ul>
+                <li>💸 Tracking daily expenses</li>
+                <li>📊 Providing real-time insights</li>
+                <li>📅 Managing your budget efficiently</li>
+                <li>🔐 Ensuring secure, user-friendly experience</li>
+              </ul>
+              <div class="contact-details">
+                <h4>Contact Info</h4>
+                <p>Email: support@expensetracker.com</p>
+                <p>Phone: +880 1234-567890</p>
+                <p>Address: 123 Expense Lane, Dhaka, Bangladesh</p>
+              </div>
+            </div>
 
-          <div class="mt-4">
-            <h5 class="text-secondary">Contact Info</h5>
-            <p>Email: <a href="mailto:support@expensetracker.com">support@expensetracker.com</a></p>
-            <p>Phone: +880 1234-567890</p>
-            <p>Address: 123 Expense Lane, Dhaka, Bangladesh</p>
+            <!-- Contact Form Box -->
+            <div class="contact-form-box">
+              <div class="contact-form">
+                <h2>Contact Us</h2>
+
+                {% if messages %}
+                  <div class="message-box">
+                    {% for message in messages %}
+                      <p>{{ message }}</p>
+                    {% endfor %}
+                  </div>
+                {% endif %}
+
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="email" name="email" placeholder="Your Email" value="{{ initial_email }}" required>
+                  <textarea name="message" rows="5" placeholder="Your Message" required></textarea>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="is_user" {% if user.is_authenticated %}checked{% endif %}>
+                    I am a registered user
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" name="consent" id="consentCheckbox">
+                    I agree to the privacy policy.
+                  </label>
+                  <button type="submit" id="submitBtn" disabled>Submit</button>
+                </form>
+              </div>
+            </div>
+
           </div>
-        </div>
-
-        <!-- Right Form -->
-        <div class="col-md-6">
-          <h2 class="text-primary mb-3">Contact Us</h2>
-          
-          <!-- Success or Error Message -->
-          {% if messages %}
-            <div class="alert alert-info" role="alert">
-              {% for message in messages %}
-                <p>{{ message }}</p>
-              {% endfor %}
-            </div>
-          {% endif %}
-
-          <form method="post" class="p-3 border rounded bg-light shadow-sm">
-            {% csrf_token %}
-            <div class="mb-3">
-              <input type="email" name="email" class="form-control" placeholder="Your Email" required>
-            </div>
-            <div class="mb-3">
-              <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required></textarea>
-            </div>
-            <!-- New checkbox: Are you a user? -->
-            <div class="form-check mb-2">
-              <input class="form-check-input" type="checkbox" name="is_user" id="is_user">
-              <label class="form-check-label" for="is_user">
-                I am a registered user
-              </label>
-            </div>
-            <div class="form-check mb-3">
-              <input class="form-check-input" type="checkbox" name="consent" required>
-              <label class="form-check-label">
-                I agree to the privacy policy.
-              </label>
-            </div>
-            <button type="submit" class="btn btn-primary w-100" id="submitBtn" disabled>Submit</button>
-          </form>
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
-  </section>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Enable submit button only if checkbox is checked -->
-  <script>
-    const consentCheckbox = document.querySelector('input[name="consent"]');
-    const submitButton = document.getElementById('submitBtn');
-    
-    consentCheckbox.addEventListener('change', function() {
-      submitButton.disabled = !this.checked;
-    });
-  </script>
+  </div>
 </body>
 </html>

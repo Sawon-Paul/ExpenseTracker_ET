@@ -4,9 +4,12 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Transactions
 from .serializers import TransactionSerializer
+from django.contrib.auth.decorators import login_required
+
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
+@login_required
 def transaction_list(request):
     # Get the 'type' query parameter (optional)
     transaction_type = request.query_params.get('type', None) #Here type is a param that is passed in the request

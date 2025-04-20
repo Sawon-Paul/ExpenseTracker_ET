@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us - Expense Tracker</title>
+  <link rel="stylesheet" href="{% static 'css/CONTACT/c_us.css' %}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="{% url 'home' %}">Expense Tracker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'home' %}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="{% url 'contact' %}">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Contact Info Section -->
+<div class="contact-info container my-5 p-4 shadow rounded bg-white">
+  <h2 class="text-center mb-4">Get in Touch</h2>
+  <p class="text-center mb-4">We'd love to hear from you. Reach us through any of the following methods:</p>
+
+  <div class="row text-center">
+    <div class="col-md-6">
+      <h5>📍 Address</h5>
+      <p>House #5, Road #12, Gulshan-1, Dhaka, Bangladesh</p>
+    </div>
+    <div class="col-md-6">
+      <h5>📞 Phone</h5>
+      <p>+880 1234-567890</p>
+    </div>
+    <div class="col-md-6">
+      <h5>📧 Email</h5>
+      <p>support@expensetracker.com</p>
+    </div>
+    <div class="col-md-6">
+      <h5>⏰ Working Hours</h5>
+      <p>Sunday - Thursday: 9 AM - 6 PM<br>Friday - Saturday: Closed</p>
+    </div>
+  </div>
+
+
+  <!-- Google Map -->
+  <div class="map-container mt-5">
+    <h5 class="text-center mb-3">Our Location</h5>
+    <div class="map-responsive">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.902517493533!2d90.41523901538505!3d23.7508765845899!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755c7a09943e95d%3A0x69a5bd637f15494f!2sGulshan%201%2C%20Dhaka!5e0!3m2!1sen!2sbd!4v1615637457654!5m2!1sen!2sbd"
+        width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy">
+      </iframe>
+    </div>
+  </div>
+</div>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

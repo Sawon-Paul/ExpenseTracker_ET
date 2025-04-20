@@ -54,35 +54,6 @@
                     <li><a href="{% url 'contact' %}">Contact Us</a></li>
                 </ul>
             </aside>
-
-            <main class="main-content">
-                
-                <div class="transaction-container">
-                    <h2>Transactions</h2>
-                
-                    <div class="filter-buttons">
-                        <button onclick="loadTransactions('all')">All</button>
-                        <button onclick="loadTransactions('cash_in')">Cash In</button>
-                        <button onclick="loadTransactions('cash_out')">Cash Out</button>
-                    </div>
-                
-                    <table id="transactionTable" class="transaction-table">
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Subtype</th>
-                                <th>Amount</th>
-                                <th>Description</th>
-                                <th>Timestamp</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Rows inserted by JS -->
-                        </tbody>
-                    </table>
-                </div>
-                
-            </main>
         </div>
     </div>
 </body>
