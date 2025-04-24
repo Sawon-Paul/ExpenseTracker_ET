@@ -1,0 +1,111 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends</title>
+    
+
+    <link rel="stylesheet" href="{% static 'css/DASHBOARD/dashboard.css' %}">
+    <script src="{% static 'css/DASHBOARD/js/dashboard.js' %}"></script>
+    <script src="{% static 'css/DASHBOARD/js/theme.js' %}"></script>
+    <script src="{% static 'js/FRIENDS/js/friends.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/FRIENDS/friends.css' %}">
+    <link rel="stylesheet" href="{% static 'css/DASHBOARD/theme.css' %}">
+</head>
+<body class="friends-page">
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-left">
+                <button class="sidebar-button" id="toggleSidebar">☰</button>
+                <span class="site-title">Expense Tracker</span>
+            </div>
+            <div class="navbar-right">
+                <!-- Sun/Moon Emoji for Theme Toggle -->
+                <span id="themeToggle" onclick="toggleTheme()">🌙</span> <!-- sawon -->
+
+                <button class="donate-btn" id="donateButton">Donate</button>
+                <button class="help-btn" id="helpButton">Help</button>
+                <button class="logout-btn" id="logoutButton">Logout</button>
+            </div>
+        </nav>
+
+        <div id="donateFormContainer" class="donate-form hidden">
+            <h2>Donate</h2>
+            <form id="donationForm">
+                <label for="donorName">Name:</label>
+                <input type="text" id="donorName" name="donorName" required>
+        
+                <label for="donationAmount">Amount (৳):</label>
+                <input type="number" id="donationAmount" name="donationAmount" required>
+        
+                <label for="donorEmail">Email (optional):</label>
+                <input type="email" id="donorEmail" name="donorEmail">
+        
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        
+        <!-- Sidebar + Main Content -->
+        <div class="content-area">
+            <aside class="sidebar" id="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>  <!-- sawon -->
+                    <li><a href="{% url 'friends_page' %}">Friends</a>
+                    <li><a href="#">Transactions</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="{% url 'setting' %}">Settings</a></li>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                </ul>
+            </aside>
+
+
+
+            <main class="main-content">
+                <div class="friends-container">
+                    <h2>👥 My Friends</h2>
+                    <div class="friend-grid">
+                        {% for f in my_friends %}
+                        <div class="friend-box">
+                            <p>{{ f.username }}</p>
+                        </div>
+                        {% empty %}
+                        <div class="friend-box empty">You have no friends yet 😢</div>
+                        {% endfor %}
+                    </div>
+            
+                    <h2>📨 Friend Requests</h2>
+                    <div class="friend-grid">
+                        {% for fr in friend_requests %}
+                        <div class="friend-box row">
+                            <p class="friend-name">{{ fr.from_user.username }}</p>
+                            <div class="btn-group">
+                                <a href="{% url 'confirm_friend_request' fr.id %}" class="btn accept">Accept</a>
+                                <a href="{% url 'reject_friend_request' fr.id %}" class="btn decline">Decline</a>
+                            </div>
+                        </div>                        
+                        {% empty %}
+                        <div class="friend-box empty">No pending requests!</div>
+                        {% endfor %}
+                    </div>
+            
+                    <h2>✨ Find Friends</h2>
+                    <div class="friend-grid">
+                        {% for s in suggestions %}
+                        <div class="friend-box row">
+                            <p class="friend-name">{{ s.username }}</p>
+                            <a href="{% url 'send_friend_request' s.id %}" class="btn send">Send Request</a>
+                        </div>                        
+                        {% empty %}
+                        <div class="friend-box empty">No suggestions available.</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </main>
+            
+            
+</body>
+</html>

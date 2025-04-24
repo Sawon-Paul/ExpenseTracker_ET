@@ -23,4 +23,5 @@ urlpatterns = [
     # Connect mainapp URLs here
     path('', include('mainapp.urls')),
     path('api/', include('dashboard.urls')),
+    path('friends/', include('friendship.urls')),
 ]

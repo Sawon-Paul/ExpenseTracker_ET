@@ -132,16 +132,16 @@ body.dark-mode .site-title {
 
 
 
-
+/* contact page */
 
 /* Optional: If you want to target Contact page specifically */
 body.contact-page.dark-mode .contact-section {
-    background-color: #121212 !important;
+    background-color: #bb0909 !important;
     color: rgb(255, 255, 255) !important;  /* Only apply dark mode color on contact page */
 }
 
 body.contact-page.dark-mode .contact-info {
-    background-color: #121212 !important;
+    background-color: #8d0000 !important;
     color: rgb(255, 255, 255) !important;  /* Only apply dark mode color on contact page */
 }
 
@@ -154,3 +154,11 @@ body.contact-page.dark-mode .checkbox-label {
 body.contact-page.dark-mode .form-check-label {
     color: #000000;
 }
+
+
+
+
+
+
+/* friends page */
+

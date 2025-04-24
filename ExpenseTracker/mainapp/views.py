@@ -21,6 +21,7 @@ def home_view(request):
 def contactus_page(request):
     return render(request,'CONTACT/c_us.html')
 
+@login_required
 def setting_page(request):
     return render(request,'SETTING/setting.html')
 
@@ -119,6 +120,13 @@ class RegisterView(APIView):
         if serializer.is_valid():
             serializer.save()
             otp_record.delete()
+            send_mail(
+                subject='Account created at Expense Tracker',
+                message=f'Your have successfully created an account at Expense Tracker and you can now login.',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
             return redirect('/login/') 
         return render(request, 'register.html', {'errors': serializer.errors})
 

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/DASHBOARD/theme.css' %}">   <!-- sawon -->
-    <link rel="stylesheet" href="{% static 'css/DASHBOARD/dashboardc.css' %}">
+    <link rel="stylesheet" href="{% static 'css/DASHBOARD/dashboard.css' %}">
     <script src="{% static 'css/DASHBOARD/js/dashboard.js' %}"></script>
     <script src="{% static 'css/DASHBOARD/js/theme.js' %}"></script>    <!-- sawon -->
 </head>
@@ -48,6 +48,7 @@
             <aside class="sidebar" id="sidebar">
                 <ul class="sidebar-menu">
                     <li><a href="{% url 'dashboard' %}">Dashboard</a></li>  <!-- sawon -->
+                    <li><a href="{% url 'friends_page' %}">Friends</a>
                     <li><a href="#">Transactions</a></li>
                     <li><a href="#">Reports</a></li>
                     <li><a href="{% url 'setting' %}">Settings</a></li>
