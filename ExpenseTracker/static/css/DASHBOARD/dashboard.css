@@ -186,3 +186,65 @@ h1 {
 .transaction-table th {
     background-color: #f2f2f2;
 }
+.quick-add {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    max-width: 100%;
+}
+
+.quick-add form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.quick-add label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.quick-add input,
+.quick-add select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.quick-add button[type="submit"] {
+    grid-column: span 2;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.quick-add button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+.chart-container {
+    margin: 20px auto;
+    max-width: 800px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.bar {
+    height: 30px;
+    background-color: #007BFF;
+    margin: 10px 0;
+    color: white;
+    text-align: right;
+    padding-right: 10px;
+    border-radius: 6px;
+    transition: width 0.3s ease-in-out;
+}

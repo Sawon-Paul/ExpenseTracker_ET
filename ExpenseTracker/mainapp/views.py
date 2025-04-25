@@ -43,7 +43,7 @@ def delete_account_page(request):
 
 @login_required
 def dashboard_page(request):
-    return render(request, 'dashboard/dashboard.html')
+    return render(request, 'DASHBOARD/dashboard.html')
 
 
 @login_required
