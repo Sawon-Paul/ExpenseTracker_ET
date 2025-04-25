@@ -136,12 +136,12 @@ body.dark-mode .site-title {
 
 /* Optional: If you want to target Contact page specifically */
 body.contact-page.dark-mode .contact-section {
-    background-color: #bb0909 !important;
+    background-color: #121212 !important;
     color: rgb(255, 255, 255) !important;  /* Only apply dark mode color on contact page */
 }
 
 body.contact-page.dark-mode .contact-info {
-    background-color: #8d0000 !important;
+    background-color: #121212 !important;
     color: rgb(255, 255, 255) !important;  /* Only apply dark mode color on contact page */
 }
 
@@ -162,3 +162,20 @@ body.contact-page.dark-mode .form-check-label {
 
 /* friends page */
 
+body.friends-page.dark-mode .friends-container{
+    background-color: #121212 !important;
+}
+
+body.friends-page.dark-mode .friends-container h2{
+    color: #0085c2 !important;
+}
+
+body.friends-page.dark-mode .friend-box{
+    background-color: #4948488f !important;
+    color: white;
+}
+
+body.friends-page.dark-mode .friend-box:hover {
+    box-shadow: 0 4px 16px rgba(255, 255, 255, 0.26);
+  }
+  

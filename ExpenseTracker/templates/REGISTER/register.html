@@ -58,6 +58,11 @@
             <button type="submit" class="submit-btn">Register</button>
         </form>
 
+        <p class="login-text">
+             Already have an account?
+            <a href="{% url 'login' %}" class="login-link">Login</a>
+        </p>
+
         {% if errors %}
             <div class="error-messages">
                 <ul>

@@ -5,6 +5,11 @@ body {
     background-color: #f4f7f6;
     margin: 0;
     padding: 0;
+    height: 100%;
+    background-image: url('login.png');
+    background-size: cover;
+    background-position: relative;
+    z-index: -1;
 }
 
 .container {
@@ -64,3 +69,13 @@ button.submit-btn:hover {
     margin-top: 10px;
 }
 
+.register-link {
+    text-decoration: none;
+    transition: all 0.3s ease; 
+}
+
+.register-link:hover {
+    text-decoration: none;
+    color: #c22727;
+    font-size: 1.1em; 
+}
