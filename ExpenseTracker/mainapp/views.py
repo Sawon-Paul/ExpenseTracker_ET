@@ -25,6 +25,14 @@ def contactus_page(request):
 def setting_page(request):
     return render(request,'SETTING/setting.html')
 
+@login_required
+def update_profile_page(request):
+    return render(request, 'UPDATE_PROFILE/update_profile.html')
+
+@login_required
+def delete_account_page(request):
+    return render(request, 'DELETE_ACCOUNT/delete_account.html')
+
 # Render registration form
 def register_page(request):
     return render(request, 'REGISTER/register.html')
@@ -146,28 +154,23 @@ class LoginView(APIView):
     
 
 
+# views.py (continued)
+
 class UpdateProfileView(APIView):
     def post(self, request):
         email = request.data.get('email')
-        otp_input = request.data.get('otp')
-
-        try:
-            otp_record = EmailOTP.objects.get(email=email)
-        except EmailOTP.DoesNotExist:
-            return Response({'error': 'OTP not requested'}, status=400)
-
-        if otp_record.otp != otp_input:
-            return Response({'error': 'Invalid OTP'}, status=400)
-
         serializer = UserUpdateSerializer(data=request.data)
         if serializer.is_valid():
-            user = User.objects.get(email=email)
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                return Response({'error': 'User not found'}, status=404)
+
             user.name = serializer.validated_data.get('name')
             user.username = serializer.validated_data.get('username')
             user.number = serializer.validated_data.get('number')
             user.password = make_password(serializer.validated_data.get('password'))
             user.save()
-            otp_record.delete()
             return Response({'message': 'Profile updated successfully'}, status=200)
         return Response(serializer.errors, status=400)
 
@@ -185,10 +188,14 @@ class DeleteAccountView(APIView):
         if otp_record.otp != otp_input:
             return Response({'error': 'Invalid OTP'}, status=400)
 
-        user = User.objects.get(email=email)
-        user.delete()
-        otp_record.delete()
-        return Response({'message': 'Account deleted successfully'}, status=200)
+        try:
+            user = User.objects.get(email=email)
+            user.delete()
+            otp_record.delete()
+            return Response({'message': 'Account deleted successfully'}, status=200)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+
     
 
 # Logout view

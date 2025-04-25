@@ -33,16 +33,9 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
-    password2 = serializers.CharField(write_only=True)
-
     class Meta:
         model = User
-        fields = ['name', 'email', 'username', 'number', 'password', 'password2']
-
-    def validate(self, attrs):
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError("Passwords do not match")
-        return attrs
+        fields = ['name', 'email', 'username', 'number']
 
 
 class EmailOTPSerializer(serializers.ModelSerializer):

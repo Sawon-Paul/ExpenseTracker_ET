@@ -1,14 +1,48 @@
+/* delete_account.css */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
-    padding: 20px;
+    background-color: #fff4f4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 50px;
+    color: #333;
 }
-form {
+
+.container {
     max-width: 400px;
     margin: auto;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(255, 0, 0, 0.1);
+    border: 1px solid #f5c2c7;
 }
-input, button {
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #dc3545;
+}
+
+input[type="email"],
+input[type="text"] {
     width: 100%;
-    margin: 10px 0;
-    padding: 10px;
+    padding: 12px;
+    margin: 8px 0 16px 0;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #a71d2a;
 }

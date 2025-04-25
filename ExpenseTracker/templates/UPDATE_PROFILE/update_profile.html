@@ -1,28 +1,26 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Update Profile</title>
-    <link rel="stylesheet" href="{% static 'update_profile.css' %}">
+    <link rel="stylesheet" href="{% static 'css/UPDATE_PROFILE/update_profile.css' %}">
 </head>
 <body>
-    <h2>Update Profile</h2>
-    <form id="update-profile-form" method="post">
-        {% csrf_token %}
-        <input type="text" name="name" id="name" placeholder="Name" required><br>
-        <input type="email" name="email" id="email" placeholder="Email" required><br>
-        <input type="text" name="username" id="username" placeholder="Username" required><br>
-        <input type="text" name="number" id="number" placeholder="Phone Number" required><br>
-        <input type="password" name="password" id="password" placeholder="Password" required><br>
-        <input type="password" name="password2" id="password2" placeholder="Confirm Password" required><br>
-        <input type="text" name="otp" id="otp" placeholder="Enter OTP" required><br>
-        <button type="submit">Update Profile</button>
-    </form>
-
-    <script>
-        document.getElementById("update-profile-form").addEventListener("submit", function(event){
-            event.preventDefault();
-            // Handle form submission with JavaScript (AJAX)
-        });
-    </script>
+    <div class="container">
+        <h2>Update Profile</h2>
+        <form method="POST" action="{% url 'update_profile_api' %}">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="text" name="otp" placeholder="OTP" required>
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="text" name="number" placeholder="Phone Number" required>
+            <input type="password" name="password" placeholder="New Password" required>
+            <input type="password" name="password2" placeholder="Confirm Password" required>
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
 </body>
 </html>
+
