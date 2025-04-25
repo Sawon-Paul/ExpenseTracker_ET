@@ -32,11 +32,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return User.objects.create_user(**validated_data)
 
 
-class UserUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['name', 'email', 'username', 'number']
-
 
 class EmailOTPSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,0 +1,141 @@
+{% load static %} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Delete Account</title>
+    <link rel="stylesheet" href="{% static 'css/DASHBOARD/theme.css' %}">   <!-- sawon -->
+    <link rel="stylesheet" href="{% static 'css/DASHBOARD/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/DELETE_ACCOUNT/delete_account.css' %}">
+    <script src="{% static 'css/DASHBOARD/js/dashboard.js' %}"></script>
+    <script src="{% static 'css/DASHBOARD/js/theme.js' %}"></script>    <!-- sawon -->
+</head>
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="navbar-left">
+                <button class="sidebar-button" id="toggleSidebar">☰</button>
+                <span class="site-title">Expense Tracker</span>
+            </div>
+            <div class="navbar-right">
+                <!-- Sun/Moon Emoji for Theme Toggle -->
+                <span id="themeToggle" onclick="toggleTheme()">🌙</span> <!-- sawon -->
+
+                <button class="donate-btn" id="donateButton">Donate</button>
+                <button class="help-btn" id="helpButton">Help</button>
+                <button class="logout-btn" id="logoutButton">Logout</button>
+            </div>
+        </nav>
+
+        <div id="donateFormContainer" class="donate-form hidden">
+            <h2>Donate</h2>
+            <form id="donationForm">
+                <label for="donorName">Name:</label>
+                <input type="text" id="donorName" name="donorName" required>
+        
+                <label for="donationAmount">Amount (৳):</label>
+                <input type="number" id="donationAmount" name="donationAmount" required>
+        
+                <label for="donorEmail">Email (optional):</label>
+                <input type="email" id="donorEmail" name="donorEmail">
+        
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        
+        <!-- Sidebar + Main Content -->
+        <div class="content-area">
+            <aside class="sidebar" id="sidebar">
+                <ul class="sidebar-menu">
+                    <li><a href="{% url 'dashboard' %}">Dashboard</a></li>  <!-- sawon -->
+                    <li><a href="{% url 'friends_page' %}">Friends</a>
+                    <li><a href="#">Transactions</a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="{% url 'setting' %}">Settings</a></li>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div class="container-D">
+        <h2>Delete Account</h2>
+        <form method="POST" action="{% url 'delete_account_api' %}">
+            {% csrf_token %}
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" value="{{ request.user.email }}" readonly required>
+
+            <label for="otp">OTP</label>
+            <input type="text" id="otp" name="otp" placeholder="Enter OTP" required>
+
+            <p id="otp-feedback" class="otp-feedback"></p>
+
+            <button type="button" class="otp-btn" id="send-otp-btn">Send OTP</button>
+            <button type="submit"  id="delete-account" onclick="return confirm('Are you sure you want to delete your account?');">Delete Account</button>
+        </form>
+    </div>
+
+    <script>
+        const sendOtpBtn = document.getElementById('send-otp-btn');
+        const otpFeedback = document.getElementById('otp-feedback');
+
+        sendOtpBtn.addEventListener('click', function () {
+            const email = document.getElementById('email').value;
+            const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+            if (!email) {
+                alert("Please enter your email first.");
+                return;
+            }
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.textContent = "Sending...";
+
+            fetch('/send-otp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to send OTP.");
+                return response.json();
+            })
+            .then(data => {
+                otpFeedback.textContent = data.msg || data.error || 'Response received.';
+                otpFeedback.style.color = data.error ? 'red' : 'green';
+            })
+            .catch(error => {
+                console.error('Error sending OTP:', error);
+                otpFeedback.textContent = "An error occurred. Please try again.";
+                otpFeedback.style.color = "red";
+            });
+
+            // Countdown and re-enable
+            let countdown = 10;
+            sendOtpBtn.textContent = `Wait ${countdown}s`;
+            const interval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    sendOtpBtn.textContent = `Wait ${countdown}s`;
+                } else {
+                    clearInterval(interval);
+                    sendOtpBtn.disabled = false;
+                    sendOtpBtn.textContent = "Send OTP";
+                }
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>

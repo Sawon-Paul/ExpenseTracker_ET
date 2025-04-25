@@ -49,6 +49,7 @@
             <div class="form-group">
                 <label for="otp">OTP</label>
                 <input type="text" name="otp" id="otp" required>
+                <p id="otp-feedback" class="otp-feedback"></p>
             </div>
 
             <!-- Send OTP button first -->
@@ -79,9 +80,10 @@
 
 <script>
     const sendOtpBtn = document.getElementById('send-otp-btn');
+    const otpFeedback = document.getElementById('otp-feedback');
 
     sendOtpBtn.addEventListener('click', function () {
-        const email = document.querySelector('input[name="email"]').value;
+        const email = document.getElementById('email').value;
         const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
 
         if (!email) {
@@ -90,6 +92,8 @@
         }
 
         sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = "Sending...";
+
         fetch('/send-otp/', {
             method: 'POST',
             headers: {
@@ -98,18 +102,33 @@
             },
             body: JSON.stringify({ email: email })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) throw new Error("Failed to send OTP.");
+            return response.json();
+        })
         .then(data => {
-            alert(data.msg || data.error);
+            otpFeedback.textContent = data.msg || data.error || 'Response received.';
+            otpFeedback.style.color = data.error ? 'red' : 'green';
         })
         .catch(error => {
             console.error('Error sending OTP:', error);
+            otpFeedback.textContent = "An error occurred. Please try again.";
+            otpFeedback.style.color = "red";
         });
 
-        // Disable the button for 10 seconds
-        setTimeout(() => {
-            sendOtpBtn.disabled = false;
-        }, 10000);
+        // Countdown and re-enable
+        let countdown = 10;
+        sendOtpBtn.textContent = `Wait ${countdown}s`;
+        const interval = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                sendOtpBtn.textContent = `Wait ${countdown}s`;
+            } else {
+                clearInterval(interval);
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.textContent = "Send OTP";
+            }
+        }, 1000);
     });
 </script>
 

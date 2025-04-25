@@ -172,10 +172,9 @@ body.friends-page.dark-mode .friends-container h2{
 
 body.friends-page.dark-mode .friend-box{
     background-color: #4948488f !important;
-    color: white;
+    color: white !important;
 }
 
 body.friends-page.dark-mode .friend-box:hover {
     box-shadow: 0 4px 16px rgba(255, 255, 255, 0.26);
-  }
-  
+}

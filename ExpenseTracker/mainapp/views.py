@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import render, redirect
 from .models import User, EmailOTP, Feedback
-from .serializers import UserRegisterSerializer, UserUpdateSerializer, EmailOTPSerializer
+from .serializers import UserRegisterSerializer, EmailOTPSerializer
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.core.mail import send_mail
@@ -13,6 +13,10 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication
+
+
 
 
 def home_view(request):
@@ -22,12 +26,16 @@ def contactus_page(request):
     return render(request,'CONTACT/c_us.html')
 
 @login_required
+def update_profile_page(request):
+    return render(request, 'UPDATE_PROFILE/update_profile.html', {
+        'user': request.user
+    })
+
+
+@login_required
 def setting_page(request):
     return render(request,'SETTING/setting.html')
 
-@login_required
-def update_profile_page(request):
-    return render(request, 'UPDATE_PROFILE/update_profile.html')
 
 @login_required
 def delete_account_page(request):
@@ -43,7 +51,7 @@ def login_page(request):
 
 # Render update profile form
 def update_profile_page(request):
-    return render(request, 'update_profile.html')
+    return render(request, 'UPDATE_PROFILE/update_profile.html')
 
 # Render delete account form
 def delete_account_page(request):
@@ -150,29 +158,8 @@ class LoginView(APIView):
             return redirect('/dashboard/')
         return render(request, "Login/login.html", {"error": "Invalid email or password."})
 
-    
-    
 
 
-# views.py (continued)
-
-class UpdateProfileView(APIView):
-    def post(self, request):
-        email = request.data.get('email')
-        serializer = UserUpdateSerializer(data=request.data)
-        if serializer.is_valid():
-            try:
-                user = User.objects.get(email=email)
-            except User.DoesNotExist:
-                return Response({'error': 'User not found'}, status=404)
-
-            user.name = serializer.validated_data.get('name')
-            user.username = serializer.validated_data.get('username')
-            user.number = serializer.validated_data.get('number')
-            user.password = make_password(serializer.validated_data.get('password'))
-            user.save()
-            return Response({'message': 'Profile updated successfully'}, status=200)
-        return Response(serializer.errors, status=400)
 
 
 class DeleteAccountView(APIView):
@@ -190,9 +177,17 @@ class DeleteAccountView(APIView):
 
         try:
             user = User.objects.get(email=email)
+            send_mail(
+                subject='Expense Tracker account deleted',
+                message=f'Your Expense Tracker account has been deleted. You  can Create  another account to login.',
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+                fail_silently=False,
+            )
             user.delete()
             otp_record.delete()
-            return Response({'message': 'Account deleted successfully'}, status=200)
+            return redirect('/login/')
+            #return Response({'message': 'Account deleted successfully'}, status=200)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=404)
 

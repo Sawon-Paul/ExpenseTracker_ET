@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Profile</title>
+    <link rel="stylesheet" href="{% static 'css/UPDATE_PROFILE/update_profile.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Update Profile</h2>
+        <form method="POST" action="{% url 'update_profile' %}">
+            {% csrf_token %}
+
+            <!-- Email (readonly since it shouldn't be updated) -->
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" readonly required>
+
+            <!-- OTP -->
+            <label for="otp">OTP</label>
+            <input type="text" id="otp" name="otp" placeholder="Enter OTP sent to your email" required>
+            <p id="otp-feedback" class="otp-feedback"></p>
+
+            <!-- Name -->
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" value="{{ user.name }}" required>
+
+            <!-- Username -->
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" value="{{ user.username }}" required>
+
+            <!-- Phone Number -->
+            <label for="number">Phone Number</label>
+            <input type="text" id="number" name="number" value="{{ user.number }}" required>
+
+            <!-- Password -->
+            <label for="password">New Password</label>
+            <input type="password" id="password" name="password" placeholder="New Password">
+
+            <!-- Confirm Password -->
+            <label for="password2">Confirm Password</label>
+            <input type="password" id="password2" name="password2" placeholder="Confirm Password">
+
+            <!-- OTP Button -->
+            <button type="button" class="otp-btn" id="send-otp-btn">Send OTP</button>
+
+            <!-- Submit Button -->
+            <button type="submit">Update Profile</button>
+        </form>
+    </div>
+
+    <!-- OTP Script -->
+    <script>
+        const sendOtpBtn = document.getElementById('send-otp-btn');
+        const otpFeedback = document.getElementById('otp-feedback');
+
+        sendOtpBtn.addEventListener('click', function () {
+            const email = document.getElementById('email').value;
+            const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+
+            if (!email) {
+                alert("Please enter your email first.");
+                return;
+            }
+
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.textContent = "Sending...";
+
+            fetch('/send-otp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to send OTP.");
+                return response.json();
+            })
+            .then(data => {
+                otpFeedback.textContent = data.msg || data.error || 'Response received.';
+                otpFeedback.style.color = data.error ? 'red' : 'green';
+            })
+            .catch(error => {
+                console.error('Error sending OTP:', error);
+                otpFeedback.textContent = "An error occurred. Please try again.";
+                otpFeedback.style.color = "red";
+            });
+
+            // Countdown and re-enable the button after a delay
+            let countdown = 10;
+            sendOtpBtn.textContent = `Wait ${countdown}s`;
+            const interval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    sendOtpBtn.textContent = `Wait ${countdown}s`;
+                } else {
+                    clearInterval(interval);
+                    sendOtpBtn.disabled = false;
+                    sendOtpBtn.textContent = "Send OTP";
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
