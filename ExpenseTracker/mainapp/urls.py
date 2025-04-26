@@ -13,4 +13,6 @@ urlpatterns = [
     path('send-otp/', SendOTP.as_view(), name='send_otp'),
     path('register-api/', RegisterView.as_view(), name='register_api'),
     path('login-api/', LoginView.as_view(), name='login_api'),
+    path('donate/', views.donate, name='donate'),
+
 ]
