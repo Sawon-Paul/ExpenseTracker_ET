@@ -195,6 +195,18 @@ class DeleteAccountView(APIView):
 def logout_view(request):
     logout(request)  # Log the user out
     return redirect('login')  # Redirect to login page
+from django.shortcuts import render, redirect
+from .forms import DonationForm
+
+def donate(request):
+    if request.method == 'POST':
+        form = DonationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return render(request, 'donate_success.html')
+    else:
+        form = DonationForm()
+    return render(request, 'donate.html', {'form': form})
 
 
 
