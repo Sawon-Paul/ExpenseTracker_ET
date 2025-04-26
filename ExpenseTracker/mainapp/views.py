@@ -206,3 +206,44 @@ def logout_view(request):
 
 
 #anika
+
+@login_required
+def update_profile_page(request):
+    user = request.user
+    if request.method == 'POST':
+        user.name = request.POST.get('name')
+        user.username = request.POST.get('username')
+        user.number = request.POST.get('number')
+        user.save()
+        messages.success(request, "Profile updated successfully.")
+        return redirect('update_profile_page')
+    return render(request, 'UPDATE_PROFILE/update_profile.html', {'user': user})
+
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        otp_input = request.POST.get('otp')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect('setting')
+
+        try:
+            otp_record = EmailOTP.objects.get(email=request.user.email)
+            if otp_record.otp != otp_input:
+                messages.error(request, "Invalid OTP.")
+                return redirect('setting')
+        except EmailOTP.DoesNotExist:
+            messages.error(request, "OTP not requested.")
+            return redirect('setting')
+
+        request.user.set_password(new_password)
+        request.user.save()
+        otp_record.delete()
+        messages.success(request, "Password changed successfully. Please log in again.")
+        logout(request)
+        return redirect('login')
+    return redirect('setting')

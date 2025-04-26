@@ -6,6 +6,7 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="{% static 'css/DASHBOARD/theme.css' %}">   <!-- sawon -->
     <link rel="stylesheet" href="{% static 'css/DASHBOARD/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/SETTING/setting.css' %}">
     <script src="{% static 'css/DASHBOARD/js/dashboard.js' %}"></script>
     <script src="{% static 'css/DASHBOARD/js/theme.js' %}"></script>    <!-- sawon -->
 </head>
@@ -57,5 +58,105 @@
             </aside>
         </div>
     </div>
+
+
+
+
+    <div class="change-password-section">
+        <h3>Change Your Password</h3>
+        <p>To reset your password, we’ll send a one-time password (OTP) to your registered email.</p>
+    
+        <!-- Form to trigger sending OTP -->
+        <form id="otpForm" method="POST" action="{% url 'send-otp' %}">
+            {% csrf_token %}
+            <input type="email" id="email" name="email" value="{{ request.user.email }}" required placeholder="Enter your email">
+            <button type="button" id="send-otp-btn">Send OTP</button>
+            <p id="otp-feedback"></p>
+        </form>
+    
+        <br>
+    
+        <!-- Form to change password using OTP -->
+        <form method="POST" action="{% url 'change_password' %}" class="password-form">
+            {% csrf_token %}
+            <label for="otp">OTP</label>
+            <input type="text" name="otp" required placeholder="Enter the OTP">
+    
+            <label for="new_password">New Password</label>
+            <input type="password" name="new_password" required placeholder="New password">
+    
+            <label for="confirm_password">Confirm New Password</label>
+            <input type="password" name="confirm_password" required placeholder="Confirm password">
+    
+            <button type="submit">Update Password</button>
+        </form>
+    
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+
+
+
+    <script>
+        const sendOtpBtn = document.getElementById('send-otp-btn');
+        const otpFeedback = document.getElementById('otp-feedback');
+    
+        sendOtpBtn.addEventListener('click', function () {
+            const email = document.getElementById('email').value;
+            const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+    
+            if (!email) {
+                alert("Please enter your email first.");
+                return;
+            }
+    
+            sendOtpBtn.disabled = true;
+            sendOtpBtn.textContent = "Sending...";
+    
+            fetch('/send-otp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ email: email })
+            })
+            .then(response => {
+                if (!response.ok) throw new Error("Failed to send OTP.");
+                return response.json();
+            })
+            .then(data => {
+                otpFeedback.textContent = data.msg || data.error || 'Response received.';
+                otpFeedback.style.color = data.error ? 'red' : 'green';
+            })
+            .catch(error => {
+                console.error('Error sending OTP:', error);
+                otpFeedback.textContent = "An error occurred. Please try again.";
+                otpFeedback.style.color = "red";
+            });
+    
+            // Countdown and re-enable
+            let countdown = 10;
+            sendOtpBtn.textContent = `Wait ${countdown}s`;
+            const interval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    sendOtpBtn.textContent = `Wait ${countdown}s`;
+                } else {
+                    clearInterval(interval);
+                    sendOtpBtn.disabled = false;
+                    sendOtpBtn.textContent = "Send OTP";
+                }
+            }, 1000);
+        });
+    </script>
+    
+    
+    
 </body>
 </html>
