@@ -1,62 +1,78 @@
-/* update_profile.css */
-body {
-    background-color: #f4f8fb;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 50px;
-    color: #333;
-}
-
-.container {
-    max-width: 450px;
-    margin: auto;
-    background: #ffffff;
-    padding: 30px 40px;
+.update_profile {
+    background-color: #ffffff;
+    padding: 30px;
+    margin: 30px auto;
+    max-width: 600px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    box-shadow: 0px 4px 20px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-h2 {
+.update_profile h2 {
+    margin-bottom: 20px;
+    color: #333;
     text-align: center;
-    margin-bottom: 25px;
-    color: #007bff;
 }
 
-label {
+.update_profile label {
     display: block;
-    margin-top: 10px;
-    font-weight: bold;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #444;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.update_profile input[type="text"],
+.update_profile input[type="email"],
+.update_profile input[type="number"] {
     width: 100%;
-    padding: 12px;
-    margin: 8px 0 16px 0;
+    padding: 10px;
+    margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 6px;
     box-sizing: border-box;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007bff;
+.update-btn {
+    margin-top: 25px;
+    background-color: #4CAF50;
     color: white;
+    padding: 12px 20px;
     border: none;
     border-radius: 6px;
-    font-size: 16px;
     cursor: pointer;
-    margin-top: 10px;
+    width: 100%;
+    font-size: 16px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.update-btn:hover {
+    background-color: #45a049;
 }
 
-.otp-feedback {
-    font-size: 14px;
-    margin-top: -10px;
-    margin-bottom: 10px;
-    color: red;
+.message-list {
+    margin-top: 20px;
+    padding-left: 20px;
+    color: #008000;
+}
+
+
+
+
+.delete-account-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.delete-account-btn {
+    display: inline-block;
+    background-color: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.delete-account-btn:hover {
+    background-color: #c0392b;
 }

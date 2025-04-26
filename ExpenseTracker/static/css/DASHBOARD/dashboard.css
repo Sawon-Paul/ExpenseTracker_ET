@@ -106,7 +106,6 @@ h1 {
 /* Responsive styling for small screens */
 @media screen and (max-width: 768px) {
     .navbar {
-        position: fixed;
         flex-direction: column;
         height: auto;
         padding: 10px 20px;
