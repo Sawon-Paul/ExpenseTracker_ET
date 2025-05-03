@@ -1,5 +1,7 @@
 from django.urls import path
 from .views import register_page, login_page, dashboard_page, logout_view,home_view,contact_view,contactus_page,setting_page, SendOTP, RegisterView, LoginView
+from . import views
+
 
 urlpatterns = [
     path('register/', register_page, name='register'),
@@ -14,5 +16,6 @@ urlpatterns = [
     path('register-api/', RegisterView.as_view(), name='register_api'),
     path('login-api/', LoginView.as_view(), name='login_api'),
     path('donate/', views.donate, name='donate'),
+    path('donate/bkash/', views.bkash_donation, name='bkash_donate'),
 
 ]

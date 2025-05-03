@@ -13,7 +13,15 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from datetime import datetime
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import HttpResponseRedirect
+from .models import Donation
+from .serializers import DonationSerializer
+from dashboard.models import Transactions
 
 def home_view(request):
     return render(request, 'Home/home.html')
@@ -216,3 +224,28 @@ def donate(request):
 
 
 #anika
+
+
+
+
+#Anamika
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def bkash_donation(request):
+    serializer = DonationSerializer(data=request.data)
+    if serializer.is_valid():
+        donation = serializer.save(user=request.user)
+        donation.transaction_id = f"BK{random.randint(100000,999999)}"
+        donation.save()
+        Transactions.objects.create(
+            user=request.user,
+            type=Transactions.CASH_OUT,
+            subtype='donation',
+            amount=donation.amount,
+            description="bKash Donation"
+        )
+        return Response(
+            {"message": "Donation successful", "transaction_id": donation.transaction_id},
+            status=status.HTTP_201_CREATED
+        )
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

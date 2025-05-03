@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import User, EmailOTP
+from .models import Donation
+from .models import Transactions, Bill, RecurringExpense, Budget
+
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
@@ -49,3 +52,31 @@ class EmailOTPSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmailOTP
         fields = ['email', 'otp']
+        
+
+class DonationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donation
+        fields = ['id', 'name', 'email', 'amount', 'transaction_id']        
+        
+
+#Anamika
+class TransactionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Transactions
+        fields = ['user', 'type', 'subtype', 'amount', 'description', 'timestamp']
+
+class BillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Bill
+        fields = '__all__'
+
+class RecurringExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecurringExpense
+        fields = '__all__'
+
+class BudgetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Budget
+        fields = '__all__'        
