@@ -9,6 +9,7 @@ async function loadTransactions(filterType = "") {
         const response = await fetch(url);
         const data = await response.json();
         transactionsData = data;
+
         if (Array.isArray(data) && data.length > 0) {
             tableBody.innerHTML = "";
             data.forEach(tx => {
@@ -20,11 +21,35 @@ async function loadTransactions(filterType = "") {
                     <td>${tx.description}</td>
                     <td>${new Date(tx.timestamp).toLocaleString()}</td>
                     <td>${tx.tags || ''}</td>
+                    <td><button class="delete-btn" data-id="${tx.id}">🗑️</button></td>
                 `;
                 tableBody.appendChild(row);
+
+                const deleteBtn = row.querySelector(".delete-btn");
+                deleteBtn.addEventListener("click", async () => {
+                    const txId = deleteBtn.getAttribute("data-id");
+
+                    if (confirm("Are you sure you want to delete this transaction?")) {
+                        try {
+                            const response = await fetch(`/api/transactions/${txId}/delete/`, {
+                                method: "DELETE",
+                                headers: {
+                                    "X-CSRFToken": getCSRFToken(),
+                                },
+                            });
+
+                            if (response.ok) {
+                                loadTransactions(document.getElementById("transactionFilter")?.value || "");
+                            } else {
+                                alert("Failed to delete transaction.");
+                            }
+                        } catch (err) {
+                            console.error("Error deleting transaction:", err);
+                        }
+                    }
+                });
             });
             renderChart(data);
-
         } else {
             tableBody.innerHTML = "<tr><td colspan='6'>No transactions found.</td></tr>";
         }
@@ -96,7 +121,6 @@ function getCSRFToken() {
     return '';
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
     const toggleButton = document.getElementById('toggleSidebar');
     const sidebar = document.getElementById('sidebar');
@@ -119,18 +143,17 @@ document.addEventListener('DOMContentLoaded', () => {
         loadTransactions(filterDropdown.value);
     });
 
-
     loadTransactions();
 
     const typeSelect = document.getElementById('type');
     typeSelect?.addEventListener('change', updateSubtypes);
-    updateSubtypes(); 
+    updateSubtypes();
 
     const quickAddForm = document.querySelector('.quick-add form');
     quickAddForm?.addEventListener('submit', handleQuickAdd);
 });
 
-function exportToCSV(){
+function exportToCSV() {
     const headers = ["Type", "Subtype", "Amount", "Description", "Timestamp", "Tags"];
     const rows = [headers.join(",")];
 
@@ -160,7 +183,6 @@ function exportToCSV(){
 window.exportToCSV = exportToCSV;
 
 function renderChart(data) {
-
     const canvas = document.getElementById("transactionChart");
     if (!canvas) {
         console.warn("Canvas element with id 'transactionChart' not found.");
@@ -168,10 +190,8 @@ function renderChart(data) {
     }
     const ctx = canvas.getContext("2d");
 
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Aggregate totals for cash_in and cash_out
     const totals = { cash_in: 0, cash_out: 0 };
     data.forEach(tx => {
         if (tx.type === "cash_in" || tx.type === "cash_out") {
@@ -179,7 +199,6 @@ function renderChart(data) {
         }
     });
 
-    // Data for the chart
     const labels = ["Cash In", "Cash Out"];
     const values = [totals.cash_in, totals.cash_out];
 
@@ -188,13 +207,12 @@ function renderChart(data) {
     const spacing = 50;
     const baseY = 250;
 
-    // Draw the bars (for Cash In and Cash Out)
     values.forEach((val, i) => {
         const barHeight = (val / maxVal) * 200;
-        ctx.fillStyle = i === 0 ? "#28a745" : "#dc3545"; // Green for cash_in, Red for cash_out
+        ctx.fillStyle = i === 0 ? "#28a745" : "#dc3545";
         ctx.fillRect(i * (barWidth + spacing) + spacing, baseY - barHeight, barWidth, barHeight);
         ctx.fillStyle = "#000";
-        ctx.fillText(labels[i], i * (barWidth + spacing) + spacing + 10, baseY + 20); // Label under the bar
-        ctx.fillText(val.toFixed(2), i * (barWidth + spacing) + spacing + 10, baseY - barHeight - 10); // Value on top of the bar
+        ctx.fillText(labels[i], i * (barWidth + spacing) + spacing + 10, baseY + 20);
+        ctx.fillText(val.toFixed(2), i * (barWidth + spacing) + spacing + 10, baseY - barHeight - 10);
     });
 }

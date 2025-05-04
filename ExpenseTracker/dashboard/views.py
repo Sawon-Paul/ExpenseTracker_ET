@@ -34,3 +34,16 @@ def transaction_list(request):
             serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_transaction(request, transaction_id):
+    try:
+        # Get the transaction belonging to the logged-in user
+        transaction = Transactions.objects.get(id=transaction_id, user=request.user)
+    except Transactions.DoesNotExist:
+        return Response({'error': 'Transaction not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+    # Delete the transaction
+    transaction.delete()
+    return Response({'message': 'Transaction deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
