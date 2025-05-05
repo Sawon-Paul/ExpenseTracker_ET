@@ -118,6 +118,7 @@ class SendOTP(APIView):
             return Response({'error': f'Failed to send OTP: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+
 class RegisterView(APIView):
     def post(self, request):
         email = request.data.get('email')
@@ -126,25 +127,28 @@ class RegisterView(APIView):
         try:
             otp_record = EmailOTP.objects.get(email=email)
         except EmailOTP.DoesNotExist:
-            return render(request, 'register.html', {'errors': {'otp': 'OTP not requested'}})
+            return Response({'errors': {'otp': 'OTP not requested'}}, status=status.HTTP_400_BAD_REQUEST)
 
         if otp_record.otp != otp_input:
-            return render(request, 'register.html', {'errors': {'otp': 'Invalid OTP'}})
+            return Response({'errors': {'otp': 'Invalid OTP'}}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = UserRegisterSerializer(data=request.data)
-        print(serializer)
         if serializer.is_valid():
             serializer.save()
             otp_record.delete()
             send_mail(
                 subject='Account created at Expense Tracker',
-                message=f'Your have successfully created an account at Expense Tracker and you can now login.',
+                message='Your have successfully created an account at Expense Tracker and you can now login.',
                 from_email=settings.EMAIL_HOST_USER,
                 recipient_list=[email],
                 fail_silently=False,
             )
             return redirect('/login/') 
         return render(request, 'register.html', {'errors': serializer.errors})
+
+
+
+
 
 
 class LoginView(APIView):

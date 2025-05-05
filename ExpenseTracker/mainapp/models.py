@@ -62,3 +62,4 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f"Feedback from {self.email} - {self.created_at}"
+    
